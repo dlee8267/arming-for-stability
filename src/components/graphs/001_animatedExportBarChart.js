@@ -15,7 +15,7 @@ const GunBarChart = () => {
 
     d3.select(svgRef.current).selectAll("*").remove();
 
-    d3.csv(`${process.env.PUBLIC_URL}data/processed/us_export.csv`, d3.autoType).then(data => {
+    d3.csv(`${process.env.PUBLIC_URL}/data/processed/us_export.csv`, d3.autoType).then(data => {
       // Ensure data is sorted by year
       data.sort((a, b) => a.year - b.year);
 
