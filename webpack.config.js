@@ -51,7 +51,7 @@ module.exports = {
       filename: 'index.html',
     }),
     new webpack.DefinePlugin({
-      'process.env.PUBLIC_URL': 'https://raw.githubusercontent.com/dlee8267/arming-for-stability/public',
+      'process.env.PUBLIC_URL': JSON.stringify('https://raw.githubusercontent.com/dlee8267/arming-for-stability/public'),
     })
   ],
   devServer: {
