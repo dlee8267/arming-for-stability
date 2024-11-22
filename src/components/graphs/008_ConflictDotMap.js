@@ -12,43 +12,32 @@ const ConflictDotMap = () => {
   const [isPlaying, setIsPlaying] = useState(true); // Start in "play" mode by default
   const intervalRef = useRef(null);
 
-  // Dynamic asset paths for conflicts data and map data
-  const conflictsDataUrl = `${process.env.PUBLIC_URL}/assets/data/processed_conflicts_locations_with_coordinates.csv`;
-  const mapDataUrl = `${process.env.PUBLIC_URL}/assets/data/countries-110m.json`;
+  const conflictsDataUrl = `${process.env.PUBLIC_URL}/data/processed/processed_conflicts_locations_with_coordinates.csv`;
 
   useEffect(() => {
-    // Load both the conflict data and map data
     Promise.all([
       d3.csv(conflictsDataUrl),
-      d3.json(mapDataUrl)
-    ])
-      .then(([csvData, mapData]) => {
-        // Calculate intensity per location-year combination
-        const intensityData = d3.rollup(
-          csvData,
-          v => v.length,
-          d => `${d.location}_${d.year}`
-        );
+      d3.json(`${process.env.PUBLIC_URL}/countries-110m.json`)
+    ]).then(([csvData, mapData]) => {
+      const intensityData = d3.rollup(
+        csvData,
+        v => v.length,
+        d => `${d.location}_${d.year}`
+      );
 
-        // Parse and process data
-        csvData.forEach(d => {
-          d.year = +d.year;
-          d.latitude = +d.latitude;
-          d.longitude = +d.longitude;
-          d.intensity = intensityData.get(`${d.location}_${d.year}`) || 1;
-        });
+      csvData.forEach(d => {
+        d.year = +d.year;
+        d.latitude = +d.latitude;
+        d.longitude = +d.longitude;
+        d.intensity = intensityData.get(`${d.location}_${d.year}`) || 1;
+      });
 
-        setData({ csvData, mapData });
-
-        // Extract unique years and sort them
-        const years = Array.from(new Set(csvData.map(d => d.year))).sort((a, b) => a - b);
-        setUniqueYears(years);
-
-        // Default selected year
-        setSelectedYear(years.includes(2019) ? 2019 : years[0]);
-      })
-      .catch(error => console.error("Error loading data:", error));
-  }, [conflictsDataUrl, mapDataUrl]);
+      setData({ csvData, mapData });
+      const years = Array.from(new Set(csvData.map(d => d.year))).sort((a, b) => a - b);
+      setUniqueYears(years);
+      setSelectedYear(years.includes(2019) ? 2019 : years[0]);
+    }).catch(error => console.error("Error loading data:", error));
+  }, []);
 
   useEffect(() => {
     if (data.csvData.length > 0 && Object.keys(data.mapData).length > 0) {
@@ -68,7 +57,6 @@ const ConflictDotMap = () => {
 
     svg.selectAll("*").remove();
 
-    // Define projection and path for map drawing
     const projection = d3.geoMercator()
       .center([0, 20])
       .scale(130)
@@ -78,7 +66,6 @@ const ConflictDotMap = () => {
 
     const mapGroup = svg.append("g");
 
-    // Draw countries
     const countries = topojson.feature(data.mapData, data.mapData.objects.countries).features;
     mapGroup.selectAll("path")
       .data(countries)
@@ -88,14 +75,11 @@ const ConflictDotMap = () => {
       .attr("fill", "#ccc")
       .attr("stroke", "#333");
 
-    // Filter conflict data for the selected year
     const yearData = data.csvData.filter(d => d.year === +selectedYear);
 
-    // Define color scale for intensity
     const colorScale = d3.scaleSequential(d3.interpolateReds)
       .domain([1, d3.max(yearData, d => d.intensity)]);
 
-    // Plot conflict locations as circles
     mapGroup.selectAll("circle")
       .data(yearData)
       .enter()
@@ -203,6 +187,8 @@ const ConflictDotMap = () => {
           accentColor: '#e74c3c',
         }}
       />
+
+      
 
       <svg ref={svgRef} style={{ width: '100%', border: '3px solid #e74c3c', borderRadius: '8px' }}></svg>
 

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 
+
 const MigrationMap = () => {
   const svgRef = useRef();
   const width = 800;
@@ -25,11 +26,10 @@ const MigrationMap = () => {
     "All": "#9467bd"
   };
 
-  // Update URLs to use `process.env.PUBLIC_URL` for deployment compatibility
   const urls = {
     "United States": `${process.env.PUBLIC_URL}/data/processed/processed_recipients_of_us_arms_hierarchical.json`,
     "Russia": `${process.env.PUBLIC_URL}/data/processed/processed_recipients_of_russia_arms_hierarchical.json`,
-    "China": `${process.env.PUBLIC_URL}/data/processed/processed_recipients_of_china_arms_hierarchical.json`
+    "China": `${process.env.PUBLIC_URL}/data/processed/processed_recipients_of_china_arms_hierarchical.json`,
   };
 
   const geoJSONUrl = `${process.env.PUBLIC_URL}/countries-110m.json`;
@@ -47,9 +47,9 @@ const MigrationMap = () => {
   // Load world GeoJSON data
   useEffect(() => {
     d3.json(geoJSONUrl)
-      .then((worldData) => {
+      .then(worldData => {
         const centroids = {};
-        topojson.feature(worldData, worldData.objects.countries).features.forEach((feature) => {
+        topojson.feature(worldData, worldData.objects.countries).features.forEach(feature => {
           const countryName = feature.properties.name;
           centroids[normalizeCountryName(countryName)] = d3.geoCentroid(feature);
         });
@@ -63,11 +63,11 @@ const MigrationMap = () => {
 
   // Load trade data for each country
   useEffect(() => {
-    Object.keys(urls).forEach((country) => {
+    Object.keys(urls).forEach(country => {
       d3.json(urls[country])
-        .then((data) => {
+        .then(data => {
           if (data && data.recipients) {
-            setTradeData((prevData) => ({
+            setTradeData(prevData => ({
               ...prevData,
               [country]: data.recipients
             }));
@@ -82,7 +82,7 @@ const MigrationMap = () => {
   }, []);
 
   useEffect(() => {
-    if (!worldGeoJSON || Object.values(tradeData).every((data) => data.length === 0)) return;
+    if (!worldGeoJSON || Object.values(tradeData).every(data => data.length === 0)) return;
 
     const svg = d3.select(svgRef.current)
       .attr('viewBox', `0 0 ${width} ${height}`)
@@ -128,9 +128,9 @@ const MigrationMap = () => {
 
     // Draw trade lines and circles for each country
     const countriesToShow = selectedCountry === "All" ? ["United States", "Russia", "China"] : [selectedCountry];
-    countriesToShow.forEach((country) => {
+    countriesToShow.forEach(country => {
       const validTrades = tradeData[country]
-        .map((recipient) => {
+        .map(recipient => {
           const originCoords = countryCentroids[country];
           const destCountry = normalizeCountryName(recipient.recipient);
           const destCoords = countryCentroids[destCountry];
@@ -149,14 +149,14 @@ const MigrationMap = () => {
           }
           return null;
         })
-        .filter((d) => d && d.tradeValue > 0);
+        .filter(d => d && d.tradeValue > 0);
 
       const topRecipients = validTrades
         .sort((a, b) => b.tradeValue - a.tradeValue)
         .slice(0, 5)
-        .map((d) => d.destCountry);
+        .map(d => d.destCountry);
 
-      const maxTradeValue = d3.max(validTrades, (d) => d.tradeValue) || 0;
+      const maxTradeValue = d3.max(validTrades, d => d.tradeValue) || 0;
       const strokeScale = d3.scaleSqrt().domain([0, maxTradeValue]).range([1, 4]);
 
       // Draw trade lines
@@ -165,12 +165,12 @@ const MigrationMap = () => {
         .enter()
         .append("line")
         .attr("class", `trade-line-${country}`)
-        .attr("x1", (d) => d.originX)
-        .attr("y1", (d) => d.originY)
-        .attr("x2", (d) => d.destX)
-        .attr("y2", (d) => d.destY)
+        .attr("x1", d => d.originX)
+        .attr("y1", d => d.originY)
+        .attr("x2", d => d.destX)
+        .attr("y2", d => d.destY)
         .attr("stroke", originColors[country])
-        .attr("stroke-width", (d) => strokeScale(d.tradeValue))
+        .attr("stroke-width", d => strokeScale(d.tradeValue))
         .on("mouseover", (event, d) => {
           tooltip
             .style("display", "block")
@@ -195,10 +195,10 @@ const MigrationMap = () => {
         .enter()
         .append("circle")
         .attr("class", `trade-circle-${country}`)
-        .attr("cx", (d) => d.destX)
-        .attr("cy", (d) => d.destY)
-        .attr("r", (d) => topRecipients.includes(d.destCountry) ? 6 : 3)
-        .attr("fill", (d) => topRecipients.includes(d.destCountry) ? "#8A2BE2" : originColors[country])
+        .attr("cx", d => d.destX)
+        .attr("cy", d => d.destY)
+        .attr("r", d => topRecipients.includes(d.destCountry) ? 6 : 3)
+        .attr("fill", d => topRecipients.includes(d.destCountry) ? "#8A2BE2" : originColors[country])
         .on("mouseover", (event, d) => {
           tooltip
             .style("display", "block")
@@ -296,7 +296,7 @@ const MigrationMap = () => {
       <svg ref={svgRef} style={{ width: '100%', height: '80vh', border: '3px solid #e74c3c', borderRadius: '8px' }}></svg>
 
       {/* Legend */}
-      {worldGeoJSON && Object.values(tradeData).some((data) => data.length > 0) && <Legend />}
+      {worldGeoJSON && Object.values(tradeData).some(data => data.length > 0) && <Legend />}
 
       {/* Controls */}
       <div style={{ position: 'absolute', bottom: '220px', left: '20px', color: 'black', display: 'flex', flexDirection: 'column'}}>
