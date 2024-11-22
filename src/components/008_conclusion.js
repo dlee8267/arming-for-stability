@@ -16,9 +16,11 @@ const conclusion = () => {
         <ConflictDotMap />
       </div>
 
-      <p className="custom-paragraph">
+      <p className="custom-paragraph" style={{ cssText: 'margin-top: 1.5em' }}>
         <strong>Key Insights:</strong>
-        <ul style={{ margin: "1em 0", paddingLeft: "1.5em" }}>
+      </p>
+      
+        <ul style={{ cssText: 'line-height: 1.5; margin-bottom: 1em' }}>
           <li><span style={{ color: "#FF7F50" }}>1950s–1960s:</span> Concentrated in <span style={{ color: "#D2B48C" }}>East and Southeast Asia</span>, driven by Cold War proxy wars (e.g., <span style={{ fontStyle: "italic" }}>Korean War</span>, <span style={{ fontStyle: "italic" }}>Vietnam War</span>).</li>
           <li><span style={{ color: "#FF7F50" }}>1970s:</span> Increased conflicts in <span style={{ color: "#D2B48C" }}>Africa</span> and the <span style={{ color: "#D2B48C" }}>Middle East</span> (e.g., <span style={{ fontStyle: "italic" }}>Yom Kippur War</span>), while Southeast Asia remained active.</li>
           <li><span style={{ color: "#FF7F50" }}>1980s:</span> Spread to <span style={{ color: "#D2B48C" }}>Central America</span>, intensified in <span style={{ color: "#D2B48C" }}>Africa</span> (post-colonial struggles), and in the <span style={{ color: "#D2B48C" }}>Middle East</span> (e.g., <span style={{ fontStyle: "italic" }}>Iran-Iraq War</span>).</li>
@@ -30,7 +32,6 @@ const conclusion = () => {
             <span style={{ color: "#FF7F50" }}>2020s:</span> Marked by the <span style={{ fontStyle: "italic" }}>Russia-Ukraine</span> conflict, which has reshaped security dynamics in <span style={{ color: "#D2B48C" }}>Eastern Europe</span> and intensified global tensions.
           </li>
         </ul>
-      </p>
 
       <p className="custom-paragraph">
         The <span style={{ color: "#4682B4" }}>United States</span> has strategically used arms exports to build alliances, counter rivals like <span style={{ color: "#DC143C" }}>Russia</span> and <span style={{ color: "#FFDB58" }}>China</span>, and maintain global dominance. By fortifying allies in <span style={{ fontStyle: "italic" }}>Europe, the Middle East, and Asia-Pacific</span>, the <span style={{ color: "#4682B4" }}>US</span> ensures regional stability while projecting power globally. The conflict hotspots on the <span style={{ color: "#FF7F50" }}>Global Conflict Map</span> correlate with top countries supported by the <span style={{ color: "#4682B4" }}>US</span> or major importers of its weapons, as shown on the <span style={{ color: "#FF7F50" }}>Top Arms Trade chart</span> in the <span style={{ fontStyle: "italic", fontWeight: "bold" }}>Countering through Proxy Support</span> section.
