@@ -3,7 +3,7 @@ import DeckGL from '@deck.gl/react';
 import { ArcLayer } from '@deck.gl/layers';
 import { Map } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import countryCoordinates from `${process.env.PUBLIC_URL}/countryCoordinates`;
+import countryCoordinates from './countryCoordinates';
 
 const MAPBOX_TOKEN = 'pk.eyJ1Ijoia3dwdGhlZ3JlYXQiLCJhIjoiY20zajljd3Z2MDExZjJycHRvcGE0dm9uYyJ9.9IwsWKd3rM0aVxjXND4LUQ'; // Replace with your actual Mapbox token
 
